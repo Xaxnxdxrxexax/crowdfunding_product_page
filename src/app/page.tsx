@@ -4,9 +4,10 @@ import { useState } from "react";
 
 export default function HomePage() {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
+  const [isPledgeOpen, setIsPledgeOpen] = useState(false);
   return (
     <main className="overflow-hidden bg-[#FAFAFA] pb-5">
-      <header className="Fm:max-w-[1440px] Fm:mx-auto relative flex items-center">
+      <header className="relative flex items-center Fm:mx-auto Fm:max-w-[1440px]">
         <picture>
           <source
             srcSet="/images/image-hero-desktop.jpg"
@@ -26,7 +27,13 @@ export default function HomePage() {
             isHamburgerOpen ? "block" : "hidden"
           } fixed left-0 top-0 z-10 h-screen w-screen bg-gradient-to-b from-[rgba(0,0,0,0.35)] to-[rgba(0,0,0,0.05)]`}
         ></div>
-        <nav className="Fm:w-[78%] Fm:ml-40 Fm:mt-11 absolute left-0 top-0 mx-5 mt-8 flex w-[90%] items-center">
+
+        <div
+          className={`${
+            isPledgeOpen ? "block" : "hidden"
+          } fixed left-0 top-0 z-20 h-screen w-screen bg-gradient-to-b from-[rgba(0,0,0,0.35)] to-[rgba(0,0,0,0.05)]`}
+        ></div>
+        <nav className="absolute left-0 top-0 mx-5 mt-8 flex w-[90%] items-center Fm:ml-40 Fm:mt-11 Fm:w-[78%]">
           <Image
             src={"/images/logo.svg"}
             alt="logo"
@@ -43,7 +50,7 @@ export default function HomePage() {
             alt="hamburger"
             width={isHamburgerOpen ? "14" : "16"}
             height="15"
-            className="Fm:invisible Fm:absolute Fm:top-0 z-10 ml-auto mr-2"
+            className="z-10 ml-auto mr-2 Fm:invisible Fm:absolute Fm:top-0"
             onClick={() => setIsHamburgerOpen(!isHamburgerOpen)}
           />
           {isHamburgerOpen && (
@@ -62,7 +69,7 @@ export default function HomePage() {
               </ul>
             </div>
           )}
-          <ul className="Fm:visible Fm:static invisible absolute ml-auto flex items-center gap-8 font-medium text-white">
+          <ul className="invisible absolute ml-auto flex items-center gap-8 font-medium text-white Fm:visible Fm:static">
             {["About", "Discover", "Get Started"].map((item) => (
               <li key={item} className="hover:cursor-pointer">
                 {item}
@@ -71,7 +78,7 @@ export default function HomePage() {
           </ul>
         </nav>
       </header>
-      <section className="Fm:max-w-[730px] Fm:-translate-y-24 mx-auto flex w-[90%] -translate-y-12 transform flex-col items-center rounded-xl border bg-white pb-10 pl-8 pr-5">
+      <section className="mx-auto flex w-[90%] -translate-y-12 transform flex-col items-center rounded-xl border bg-white pb-10 pl-8 pr-5 Fm:max-w-[730px] Fm:-translate-y-24">
         <Image
           src={"/images/logo-mastercraft.svg"}
           alt="logo mastercraft"
@@ -82,14 +89,17 @@ export default function HomePage() {
         <h1 className="text-center text-2xl font-bold">
           Mastercraft Bamboo Monitor Riser
         </h1>
-        <h2 className="text-Fm-Dark-gray mt-5 text-center text-sm tracking-tight">
+        <h2 className="mt-5 text-center text-sm tracking-tight text-Fm-Dark-gray">
           A beautiful & handcrafted monitor stand to reduce neck and eye strain.
         </h2>
         <div className="mt-7 flex w-full gap-3">
-          <button className="bg-Fm-Moderate-cyan hover:bg-Fm-Dark-cyan Fm:grow-0 grow rounded-full px-8 font-bold text-white hover:cursor-pointer">
+          <button
+            className="grow rounded-full bg-Fm-Moderate-cyan px-8 font-bold text-white hover:cursor-pointer hover:bg-Fm-Dark-cyan Fm:grow-0"
+            onClick={() => setIsPledgeOpen(true)}
+          >
             Back this project
           </button>
-          <div className="Fm:ml-auto flex hover:cursor-pointer hover:opacity-60">
+          <div className="flex hover:cursor-pointer hover:opacity-60 Fm:ml-auto">
             <Image
               src={"/images/icon-bookmark.svg"}
               alt="bookmark"
@@ -97,105 +107,147 @@ export default function HomePage() {
               height="56"
               className="Fm:translate-x-1/2 Fm:transform"
             />
-            <p className="Fm:visible Fm:static text-Fm-Dark-gray invisible absolute left-0 top-0 flex w-36 items-center rounded-r-full border bg-[#FAFAFA] pl-10 font-bold">
+            <p className="invisible absolute left-0 top-0 flex w-36 items-center rounded-r-full border bg-[#FAFAFA] pl-10 font-bold text-Fm-Dark-gray Fm:visible Fm:static">
               Bookmark
             </p>
           </div>
         </div>
       </section>
-      <section className="Fm:max-w-[730px] Fm:-translate-y-24 Fm:flex-row Fm:flex-wrap mx-auto my-8 flex w-[90%] -translate-y-12 transform flex-col items-center rounded-xl border bg-white px-8 py-10 ">
-        <div className="Fm:w-1/4 Fm:text-left text-center">
-          <p className="text-Fm-Black text-4xl font-bold">$89,914</p>
-          <p className="text-Fm-Dark-gray mt-2">of $100,000 backed</p>
+      <section className="mx-auto my-8 flex w-[90%] -translate-y-12 transform flex-col items-center rounded-xl border bg-white px-8 py-10 Fm:max-w-[730px] Fm:-translate-y-24 Fm:flex-row Fm:flex-wrap ">
+        <div className="text-center Fm:w-1/4 Fm:text-left">
+          <p className="text-4xl font-bold text-Fm-Black">$89,914</p>
+          <p className="mt-2 text-Fm-Dark-gray">of $100,000 backed</p>
         </div>
-        <div className="Fm:transform Fm:rotate-90 my-7 w-20 border-t-[1px]"></div>
-        <div className="Fm:w-1/4 Fm:text-left text-center">
-          <p className="text-Fm-Black text-4xl font-bold">5,007</p>
-          <p className="text-Fm-Dark-gray mt-2">total backers</p>
+        <div className="my-7 w-20 border-t-[1px] Fm:rotate-90 Fm:transform"></div>
+        <div className="text-center Fm:w-1/4 Fm:text-left">
+          <p className="text-4xl font-bold text-Fm-Black">5,007</p>
+          <p className="mt-2 text-Fm-Dark-gray">total backers</p>
         </div>
-        <div className="Fm:transform Fm:rotate-90 my-7 w-20 border-t-[1px]"></div>
-        <div className="Fm:w-1/4 Fm:text-left text-center">
-          <p className="text-Fm-Black text-4xl font-bold">56</p>
-          <p className="text-Fm-Dark-gray mt-2">days left</p>
+        <div className="my-7 w-20 border-t-[1px] Fm:rotate-90 Fm:transform"></div>
+        <div className="text-center Fm:w-1/4 Fm:text-left">
+          <p className="text-4xl font-bold text-Fm-Black">56</p>
+          <p className="mt-2 text-Fm-Dark-gray">days left</p>
         </div>
         <div className="mt-7 h-3 w-full rounded-full bg-[#f4f4f4]">
           <div
-            className="bg-Fm-Moderate-cyan h-full rounded-full"
+            className="h-full rounded-full bg-Fm-Moderate-cyan"
             style={{ width: "80%" }}
           ></div>
         </div>
       </section>
-      <section className="Fm:max-w-[730px] Fm:-translate-y-24 Fm:pl-10 Fm:pr-12 mx-auto flex w-[90%] -translate-y-12 transform flex-col items-center rounded-xl border bg-white pb-10 pl-5 pr-4 pt-10">
+      <section className="mx-auto flex w-[90%] -translate-y-12 transform flex-col items-center rounded-xl border bg-white pb-10 pl-5 pr-4 pt-10 Fm:max-w-[730px] Fm:-translate-y-24 Fm:pl-10 Fm:pr-12">
         <h3 className="mb-5 w-full text-left text-xl font-bold">
           About this project
         </h3>
-        <p className="text-Fm-Dark-gray  Fm:text-base Fm:mt-6 Fm:leading-7 text-sm leading-6">
+        <p className="text-sm  leading-6 text-Fm-Dark-gray Fm:mt-6 Fm:text-base Fm:leading-7">
           The Mastercraft Bamboo Monitor Riser is a sturdy and stylish platform
           that elevates your screen to a more comfortable viewing height.
           Placing your monitor at eye level has the potential to improve your
           posture and make you more comfortable while at work, helping you stay
           focused on the task at hand.
         </p>
-        <p className="text-Fm-Dark-gray Fm:text-base Fm:mt-8 Fm:tracking-normal  Fm:leading-7 mr-2 mt-6 text-sm leading-6 tracking-tight">
+        <p className="mr-2 mt-6 text-sm leading-6  tracking-tight text-Fm-Dark-gray Fm:mt-8 Fm:text-base Fm:leading-7 Fm:tracking-normal">
           Featuring artisan craftsmanship, the simplicity of design creates
           extra desk space below your computer to allow notepads, pens, and USB
           sticks to be stored under the stand.
         </p>
-        <aside className="Fm:flex Fm:flex-wrap Fm:justify-around Fm:pr-10 Fm:py-8 Fm:items-center mt-10 w-full rounded-xl border border-gray-300 pl-6 pt-6">
-          <h4 className="Fm:text-xl text-sm font-bold">Bamboo Stand</h4>
-          <p className="text-Fm-Moderate-cyan Fm:ml-auto Fm:text-base Fm:mb-0 mb-6 mt-1 text-sm font-semibold">
+        <aside className="mt-10 w-full rounded-xl border border-gray-300 pl-6 pt-6 Fm:flex Fm:flex-wrap Fm:items-center Fm:justify-around Fm:py-8 Fm:pr-10">
+          <h4 className="text-sm font-bold Fm:text-xl">Bamboo Stand</h4>
+          <p className="mb-6 mt-1 text-sm font-semibold text-Fm-Moderate-cyan Fm:mb-0 Fm:ml-auto Fm:text-base">
             Pledge $25 or more
           </p>
-          <p className="text-Fm-Dark-gray Fm:text-base Fm:mr-0 Fm:my-5 Fm:leading-7 mr-3 text-sm leading-6">
+          <p className="mr-3 text-sm leading-6 text-Fm-Dark-gray Fm:my-5 Fm:mr-0 Fm:text-base Fm:leading-7">
             You get an ergonomic stand made of natural bamboo. You&apos;ve
             helped us launch our promotional campaign, and you&apos;ll be added
             to a special Backer member list.
           </p>
-          <p className="text-Fm-Dark-gray Fm:self-stretch Fm:my-0 mb-7 mt-5 flex items-center">
-            <span className="text-Fm-Black mr-2 text-3xl font-bold">101</span>{" "}
+          <p className="mb-7 mt-5 flex items-center text-Fm-Dark-gray Fm:my-0 Fm:self-stretch">
+            <span className="mr-2 text-3xl font-bold text-Fm-Black">101</span>{" "}
             left
           </p>
-          <button className="bg-Fm-Moderate-cyan Fm:ml-auto Fm:my-0 hover:bg-Fm-Dark-cyan mb-6 h-[50px] rounded-full px-8 text-sm font-bold text-white">
+          <button className="mb-6 h-[50px] rounded-full bg-Fm-Moderate-cyan px-8 text-sm font-bold text-white hover:bg-Fm-Dark-cyan Fm:my-0 Fm:ml-auto">
             Select Reward
           </button>
         </aside>
-        <aside className="Fm:flex Fm:flex-wrap Fm:justify-around Fm:pr-10 Fm:py-8 Fm:items-center mt-10 w-full rounded-xl border border-gray-300 pl-6 pt-6">
-          <h4 className="Fm:text-xl text-sm font-bold">Bamboo Stand</h4>
-          <p className="text-Fm-Moderate-cyan Fm:ml-auto Fm:text-base Fm:mb-0 mb-6 mt-1 text-sm font-semibold">
-            Pledge $25 or more
+        <aside className="mt-10 w-full rounded-xl border border-gray-300 pl-6 pt-6 Fm:flex Fm:flex-wrap Fm:items-center Fm:justify-around Fm:py-8 Fm:pr-10">
+          <h4 className="text-sm font-bold Fm:text-xl">Black Edition Stand</h4>
+          <p className="mb-6 mt-1 text-sm font-semibold text-Fm-Moderate-cyan Fm:mb-0 Fm:ml-auto Fm:text-base">
+            Pledge $75 or more
           </p>
-          <p className="text-Fm-Dark-gray Fm:text-base Fm:mr-0 Fm:my-5 Fm:leading-7 mr-3 text-sm leading-6">
-            You get an ergonomic stand made of natural bamboo. You&apos;ve
-            helped us launch our promotional campaign, and you&apos;ll be added
-            to a special Backer member list.
+          <p className="mr-3 text-sm leading-6 text-Fm-Dark-gray Fm:my-5 Fm:mr-0 Fm:text-base Fm:leading-7">
+            You get a Black Special Edition computer stand and a personal thank
+            you. You&apos;ll be added to our Backer member list. Shipping is
+            included.
           </p>
-          <p className="text-Fm-Dark-gray Fm:self-stretch Fm:my-0 mb-7 mt-5 flex items-center">
-            <span className="text-Fm-Black mr-2 text-3xl font-bold">101</span>{" "}
+          <p className="mb-7 mt-5 flex items-center text-Fm-Dark-gray Fm:my-0 Fm:self-stretch">
+            <span className="mr-2 text-3xl font-bold text-Fm-Black">64</span>{" "}
             left
           </p>
-          <button className="bg-Fm-Moderate-cyan Fm:ml-auto Fm:my-0 mb-6 h-[50px] rounded-full px-8 text-sm font-bold text-white">
+          <button className="mb-6 h-[50px] rounded-full bg-Fm-Moderate-cyan px-8 text-sm font-bold text-white Fm:my-0 Fm:ml-auto">
             Select Reward
           </button>
         </aside>
-        <aside className="Fm:flex Fm:flex-wrap Fm:justify-around Fm:pr-10 Fm:py-8 Fm:items-center mt-10 w-full rounded-xl border border-gray-300 pl-6 pt-6 opacity-40">
-          <h4 className="Fm:text-xl text-sm font-bold">Bamboo Stand</h4>
-          <p className="text-Fm-Moderate-cyan Fm:ml-auto Fm:text-base Fm:mb-0 mb-6 mt-1 text-sm font-semibold">
-            Pledge $25 or more
+        <aside className="mt-10 w-full rounded-xl border border-gray-300 pl-6 pt-6 opacity-40 Fm:flex Fm:flex-wrap Fm:items-center Fm:justify-around Fm:py-8 Fm:pr-10">
+          <h4 className="text-sm font-bold Fm:text-xl">
+            Mahogany Special Edition
+          </h4>
+          <p className="mb-6 mt-1 text-sm font-semibold text-Fm-Moderate-cyan Fm:mb-0 Fm:ml-auto Fm:text-base">
+            Pledge $200 or more
           </p>
-          <p className="text-Fm-Dark-gray Fm:text-base Fm:mr-0 Fm:my-5 Fm:leading-7 mr-3 text-sm leading-6">
-            You get an ergonomic stand made of natural bamboo. You&apos;ve
-            helped us launch our promotional campaign, and you&apos;ll be added
-            to a special Backer member list.
+          <p className="mr-3 text-sm leading-6 text-Fm-Dark-gray Fm:my-5 Fm:mr-0 Fm:text-base Fm:leading-7">
+            You get two Special Edition Mahogany stands, a Backer T-Shirt, and a
+            personal thank you. You&apos;ll be added to our Backer member list.
+            Shipping is included.
           </p>
-          <p className="text-Fm-Dark-gray Fm:self-stretch Fm:my-0 mb-7 mt-5 flex items-center">
-            <span className="text-Fm-Black mr-2 text-3xl font-bold">101</span>{" "}
+          <p className="mb-7 mt-5 flex items-center text-Fm-Dark-gray Fm:my-0 Fm:self-stretch">
+            <span className="mr-2 text-3xl font-bold text-Fm-Black">0 </span>{" "}
             left
           </p>
-          <button className="bg-Fm-Moderate-cyan Fm:ml-auto Fm:my-0 mb-6 h-[50px] rounded-full px-8 text-sm font-bold text-white">
+          <button className="mb-6 h-[50px] rounded-full bg-Fm-Moderate-cyan px-8 text-sm font-bold text-white Fm:my-0 Fm:ml-auto">
             Select Reward
           </button>
         </aside>
       </section>
+      {isPledgeOpen && (
+        <div className="absolute top-32 z-20 mx-5 w-[90%] rounded-xl bg-white px-6 pb-8 pt-5 ">
+          <h2 className="text-xl font-bold">Back this project</h2>
+          <Image
+            src={"/images/icon-close-modal.svg"}
+            alt="close"
+            width="15"
+            height="15"
+            onClick={() => setIsPledgeOpen(false)}
+            className="absolute right-6 top-6 cursor-pointer Fm:w-max"
+          />
+          <p className="mb-7 mt-8 text-sm leading-6 text-Fm-Dark-gray">
+            Want to support us in bringing Mastercraft Bamboo Monitor Riser out
+            in the world?
+          </p>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-0 rounded-xl border-[1px] border-gray-300 px-7 py-8">
+            <div className="h-6 w-6 rounded-full border-[1px]"></div>
+            <p className="text-sm font-bold">Pledge with no reward</p>
+            <p className="mt-7 text-sm leading-6 text-Fm-Dark-gray">
+              Choose to support us without a reward if you simply believe in our
+              project. As a backer, you will be signed up to receive product
+              updates via email.
+            </p>
+          </div>
+          <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-0 rounded-xl border-[1px] border-gray-300 px-7 py-8">
+            <div className="h-6 w-6 rounded-full border-[1px]"></div>
+            <div>
+              <p className="text-sm font-bold">Bamboo Stand</p>
+              <p className="text-sm text-Fm-Moderate-cyan">
+                Pledge $25 or more
+              </p>
+            </div>
+            <p className="mt-7 text-sm leading-6 text-Fm-Dark-gray">
+              You get an ergonomic stand made of natural bamboo. You&apos;ve
+              helped us launch our promotional campaign, and you’ll be added to
+              a special Backer member list.
+            </p>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
