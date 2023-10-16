@@ -6,8 +6,8 @@ export default function HomePage() {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   return (
     <main className="overflow-hidden bg-[#FAFAFA] pb-5">
-      <header className="relative flex items-center">
-        <picture className="">
+      <header className="Fm:max-w-[1440px] Fm:mx-auto relative flex items-center">
+        <picture>
           <source
             srcSet="/images/image-hero-desktop.jpg"
             media="(min-width: 376px)"
