@@ -313,7 +313,7 @@ export default function HomePage() {
                                         ...projectData!.pledges,
                                         [key]: {
                                           ...value,
-                                          amountLeft: amountLeft! - 1,
+                                          amountLeft: amountLeft - 1,
                                         },
                                       },
                                     };
@@ -418,7 +418,7 @@ export default function HomePage() {
                                         ...projectData!.pledges,
                                         [key]: {
                                           ...value,
-                                          amountLeft: amountLeft! - 1,
+                                          amountLeft: amountLeft - 1,
                                         },
                                       },
                                     };
