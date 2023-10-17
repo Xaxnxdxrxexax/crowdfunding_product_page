@@ -7,6 +7,9 @@ export default function HomePage() {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const [isPledgeOpen, setIsPledgeOpen] = useState(false);
   const [projectData, setProjectData] = useState(fmData[0]);
+  const [currentPledge, setCurrentPledge] = useState<null | string>(null);
+  const [isSuccessful, setIsSuccessful] = useState(false);
+  const [amountPledged, setAmountPledged] = useState<null | number>(null);
   return (
     <main className="relative overflow-hidden bg-[#FAFAFA] pb-5">
       <header className="relative flex items-center Fm:mx-auto Fm:max-w-[1440px]">
@@ -121,7 +124,7 @@ export default function HomePage() {
             />
             <p
               className={`invisible absolute left-0 top-0 flex w-36 items-center rounded-r-full border bg-[#FAFAFA] pl-8 font-bold text-Fm-Dark-gray Fm:visible Fm:static ${
-                projectData?.favorite && "text-Fm-Dark-cyan"
+                projectData?.favorite && "text-Fm-Moderate-cyan"
               }`}
             >
               {projectData?.favorite ? "Bookmarked" : "Bookmark"}
@@ -152,7 +155,7 @@ export default function HomePage() {
           </p>
           <p className="mt-2 text-Fm-Dark-gray">days left</p>
         </div>
-        <div className="mt-7 h-3 w-full rounded-full bg-[#f4f4f4]">
+        <div className="mt-7 h-3 w-full overflow-hidden rounded-full bg-[#f4f4f4]">
           <div
             className="h-full rounded-full bg-Fm-Moderate-cyan"
             style={{
@@ -177,63 +180,45 @@ export default function HomePage() {
           extra desk space below your computer to allow notepads, pens, and USB
           sticks to be stored under the stand.
         </p>
-        <aside className="mt-10 w-full rounded-xl border border-gray-300 pl-6 pt-6 Fm:flex Fm:flex-wrap Fm:items-center Fm:justify-around Fm:py-8 Fm:pr-10">
-          <h4 className="text-sm font-bold Fm:text-xl">Bamboo Stand</h4>
-          <p className="mb-6 mt-1 text-sm font-semibold text-Fm-Moderate-cyan Fm:mb-0 Fm:ml-auto Fm:text-base">
-            Pledge $25 or more
-          </p>
-          <p className="mr-3 text-sm leading-6 text-Fm-Dark-gray Fm:my-5 Fm:mr-0 Fm:text-base Fm:leading-7">
-            You get an ergonomic stand made of natural bamboo. You&apos;ve
-            helped us launch our promotional campaign, and you&apos;ll be added
-            to a special Backer member list.
-          </p>
-          <p className="mb-7 mt-5 flex items-center text-Fm-Dark-gray Fm:my-0 Fm:self-stretch">
-            <span className="mr-2 text-3xl font-bold text-Fm-Black">101</span>{" "}
-            left
-          </p>
-          <button className="mb-6 h-[50px] rounded-full bg-Fm-Moderate-cyan px-8 text-sm font-bold text-white hover:bg-Fm-Dark-cyan Fm:my-0 Fm:ml-auto">
-            Select Reward
-          </button>
-        </aside>
-        <aside className="mt-10 w-full rounded-xl border border-gray-300 pl-6 pt-6 Fm:flex Fm:flex-wrap Fm:items-center Fm:justify-around Fm:py-8 Fm:pr-10">
-          <h4 className="text-sm font-bold Fm:text-xl">Black Edition Stand</h4>
-          <p className="mb-6 mt-1 text-sm font-semibold text-Fm-Moderate-cyan Fm:mb-0 Fm:ml-auto Fm:text-base">
-            Pledge $75 or more
-          </p>
-          <p className="mr-3 text-sm leading-6 text-Fm-Dark-gray Fm:my-5 Fm:mr-0 Fm:text-base Fm:leading-7">
-            You get a Black Special Edition computer stand and a personal thank
-            you. You&apos;ll be added to our Backer member list. Shipping is
-            included.
-          </p>
-          <p className="mb-7 mt-5 flex items-center text-Fm-Dark-gray Fm:my-0 Fm:self-stretch">
-            <span className="mr-2 text-3xl font-bold text-Fm-Black">64</span>{" "}
-            left
-          </p>
-          <button className="mb-6 h-[50px] rounded-full bg-Fm-Moderate-cyan px-8 text-sm font-bold text-white Fm:my-0 Fm:ml-auto">
-            Select Reward
-          </button>
-        </aside>
-        <aside className="mt-10 w-full rounded-xl border border-gray-300 pl-6 pt-6 opacity-40 Fm:flex Fm:flex-wrap Fm:items-center Fm:justify-around Fm:py-8 Fm:pr-10">
-          <h4 className="text-sm font-bold Fm:text-xl">
-            Mahogany Special Edition
-          </h4>
-          <p className="mb-6 mt-1 text-sm font-semibold text-Fm-Moderate-cyan Fm:mb-0 Fm:ml-auto Fm:text-base">
-            Pledge $200 or more
-          </p>
-          <p className="mr-3 text-sm leading-6 text-Fm-Dark-gray Fm:my-5 Fm:mr-0 Fm:text-base Fm:leading-7">
-            You get two Special Edition Mahogany stands, a Backer T-Shirt, and a
-            personal thank you. You&apos;ll be added to our Backer member list.
-            Shipping is included.
-          </p>
-          <p className="mb-7 mt-5 flex items-center text-Fm-Dark-gray Fm:my-0 Fm:self-stretch">
-            <span className="mr-2 text-3xl font-bold text-Fm-Black">0 </span>{" "}
-            left
-          </p>
-          <button className="mb-6 h-[50px] rounded-full bg-Fm-Moderate-cyan px-8 text-sm font-bold text-white Fm:my-0 Fm:ml-auto">
-            Select Reward
-          </button>
-        </aside>
+        {/* list pledges */}
+        {Object.entries(projectData!.pledges)
+          .slice(1)
+          .map(([key, value]) => (
+            <aside
+              className={`mt-10 w-full rounded-xl border border-gray-300 pl-6 pt-6 Fm:flex Fm:flex-wrap Fm:items-center Fm:justify-around Fm:py-8 Fm:pr-10 ${
+                value.amountLeft === 0 && "opacity-40"
+              }`}
+              key={key}
+            >
+              <h4 className="text-sm font-bold Fm:text-xl">{value.title}</h4>
+              <p className="mb-6 mt-1 text-sm font-semibold text-Fm-Moderate-cyan Fm:mb-0 Fm:ml-auto Fm:text-base">
+                Pledge ${value.minPledge} or more
+              </p>
+              <p className="mr-3 text-sm leading-6 text-Fm-Dark-gray Fm:my-5 Fm:mr-0 Fm:text-base Fm:leading-7">
+                {value.description}
+              </p>
+              <p className="mb-7 mt-5 flex items-center text-Fm-Dark-gray Fm:my-0 Fm:self-stretch">
+                <span className="mr-2 text-3xl font-bold text-Fm-Black">
+                  {value.amountLeft}
+                </span>{" "}
+                left
+              </p>
+              <button
+                className={`mb-6 h-[50px] rounded-full bg-Fm-Moderate-cyan px-8 text-sm font-bold text-white hover:bg-Fm-Dark-cyan Fm:my-0 Fm:ml-auto ${
+                  value.amountLeft === 0 && "bg-Fm-Dark-gray"
+                }`}
+                disabled={value.amountLeft === 0}
+                onClick={() => {
+                  setCurrentPledge(key);
+                  setIsPledgeOpen(true);
+                }}
+              >
+                {value.amountLeft === 0 ? "Out of Stock" : "Select Reward"}
+              </button>
+            </aside>
+          ))}
       </section>
+      {/* pledge modal */}
       {isPledgeOpen && (
         <div className="absolute left-0 top-0 flex h-screen w-screen items-center justify-center">
           <div className="absolute top-32 z-20 mx-auto w-[90%] rounded-xl bg-white px-6 pb-8 pt-5 Fm:max-w-[740px] Fm:p-12">
@@ -251,99 +236,226 @@ export default function HomePage() {
                 Want to support us in bringing Mastercraft Bamboo Monitor Riser
                 out in the world?
               </p>
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-0 rounded-xl border-[1px] border-gray-300 px-7 py-8">
-                <div className="h-6 w-6 rounded-full border-[1px]"></div>
-                <p className="text-sm font-bold">Pledge with no reward</p>
-                <p className="mt-7 text-sm leading-6 text-Fm-Dark-gray Fm:mt-3 Fm:pl-11">
-                  Choose to support us without a reward if you simply believe in
-                  our project. As a backer, you will be signed up to receive
-                  product updates via email.
-                </p>
-              </div>
-              <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-0 rounded-xl border-[1px] border-gray-300 px-7 py-8">
-                <div className="h-6 w-6 rounded-full border-[1px]"></div>
-                <div className="Fm:flex Fm:gap-3">
-                  <p className="text-sm font-bold">Bamboo Stand</p>
-                  <p className="text-sm text-Fm-Moderate-cyan">
-                    Pledge $25 or more
-                  </p>
-                </div>
-                <p className="mb-3 mt-7 text-sm leading-6 text-Fm-Dark-gray Fm:order-4 Fm:mt-3 Fm:pl-11">
-                  You get an ergonomic stand made of natural bamboo. You&apos;ve
-                  helped us launch our promotional campaign, and you’ll be added
-                  to a special Backer member list.
-                </p>
-                <p className="flex items-center text-Fm-Dark-gray Fm:order-3 Fm:my-0 Fm:ml-auto Fm:self-stretch">
-                  <span className="mr-2 text-lg font-bold text-Fm-Black">
-                    101
-                  </span>{" "}
-                  left
-                </p>
-                <div className="order-last w-full pt-6 Fm:flex Fm:flex-wrap">
-                  <div className="w-full border-t-[1px] pb-6 Fm:grow"></div>
-                  <p className="w-full pb-4 text-center text-Fm-Dark-gray Fm:w-auto Fm:self-center Fm:pb-0">
-                    Enter your pledge
-                  </p>
-                  <div className="flex w-full justify-between gap-3 Fm:ml-auto Fm:w-auto Fm:max-w-[220px]">
-                    <input
-                      type="number"
-                      placeholder="25"
-                      className="w-1/2 rounded-full border p-3 font-bold text-black"
-                      style={{
-                        backgroundImage: "url(images/icon-dollar.svg)",
-                        backgroundSize: "10px",
-                        backgroundPosition: "30% 53%",
-                        backgroundRepeat: "no-repeat",
-                        paddingLeft: "40px",
-                      }}
-                    />
-                    <button className="w-1/2 rounded-full border bg-Fm-Moderate-cyan p-3 px-7 text-sm font-bold text-white">
-                      Continue
-                    </button>
+              {/* no reward */}
+              {Object.entries(projectData!.pledges)
+                .slice(0, 1)
+                .map(([key, value]) => (
+                  <div
+                    className={`mb-7 flex flex-wrap items-center gap-x-5 gap-y-0 rounded-xl border-[1px] border-gray-300 px-7 py-8 ${
+                      key === currentPledge && "border-Fm-Dark-cyan"
+                    }`}
+                    key={key}
+                  >
+                    <div
+                      className={`flex h-6 w-6 items-center justify-center rounded-full border-[1px]`}
+                    >
+                      {key === currentPledge && (
+                        <div className="h-3 w-3 rounded-full bg-Fm-Moderate-cyan"></div>
+                      )}
+                    </div>
+                    <div className="Fm:flex Fm:gap-3">
+                      <p
+                        className="text-sm font-bold hover:cursor-pointer hover:text-Fm-Moderate-cyan"
+                        onClick={() => {
+                          setCurrentPledge(key);
+                        }}
+                      >
+                        {value.title}
+                      </p>
+                    </div>
+                    <p className="mb-3 mt-7 text-sm leading-6 text-Fm-Dark-gray Fm:order-4 Fm:mt-3 Fm:pl-11">
+                      {value.description}
+                    </p>
+
+                    {key === currentPledge && (
+                      <div className="order-last w-full pt-6 Fm:flex Fm:flex-wrap">
+                        <div className="w-full border-t-[1px] pb-6 Fm:grow"></div>
+                        <p className="w-full pb-4 text-center text-Fm-Dark-gray Fm:w-auto Fm:self-center Fm:pb-0">
+                          Enter your pledge
+                        </p>
+                        <div className="flex w-full justify-between gap-3 Fm:ml-auto Fm:w-auto Fm:max-w-[220px]">
+                          <input
+                            type="number"
+                            placeholder={value.minPledge.toString()}
+                            min={value.minPledge}
+                            value={amountPledged?.toString()}
+                            onChange={(e) => {
+                              setAmountPledged(Number(e.target.value));
+                            }}
+                            className="w-1/2 rounded-full border p-3 font-bold text-black"
+                            style={{
+                              backgroundImage: "url(images/icon-dollar.svg)",
+                              backgroundSize: "10px",
+                              backgroundPosition: "30% 53%",
+                              backgroundRepeat: "no-repeat",
+                              paddingLeft: "40px",
+                            }}
+                          />
+                          <button
+                            className="w-1/2 rounded-full border bg-Fm-Moderate-cyan p-3 px-7 text-sm font-bold text-white"
+                            onClick={() => {
+                              if (amountPledged! > value.minPledge) {
+                                setProjectData((projectData) => {
+                                  return {
+                                    ...projectData!,
+                                    backed:
+                                      projectData!.backed + amountPledged!,
+                                    totalBackers: projectData!.totalBackers + 1,
+                                    pledges: {
+                                      ...projectData!.pledges,
+                                      [key]: {
+                                        ...value,
+                                        amountLeft: value.amountLeft! - 1,
+                                      },
+                                    },
+                                  };
+                                });
+                                setIsSuccessful(true);
+                                setIsPledgeOpen(false);
+                                setAmountPledged(null);
+                              } else {
+                                alert(
+                                  `For the ${value.title} you need to pledge at least ${value.minPledge}`,
+                                );
+                              }
+                            }}
+                          >
+                            Continue
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                </div>
-              </div>
-              <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-0 rounded-xl border-[1px] border-gray-300 px-7 py-8">
-                <div className="h-6 w-6 rounded-full border-[1px]"></div>
-                <div className="Fm:flex Fm:gap-3">
-                  <p className="text-sm font-bold">Black Edition Stand</p>
-                  <p className="text-sm text-Fm-Moderate-cyan">
-                    Pledge $75 or more
-                  </p>
-                </div>
-                <p className="mb-3 mt-7 text-sm leading-6 text-Fm-Dark-gray Fm:order-4 Fm:mt-3 Fm:pl-11">
-                  You get a Black Special Edition computer stand and a personal
-                  thank you. You&apos;ll be added to our Backer member list.
-                  Shipping is included.
-                </p>
-                <p className="flex items-center text-Fm-Dark-gray Fm:order-3 Fm:my-0 Fm:ml-auto Fm:self-stretch">
-                  <span className="mr-2 text-lg font-bold text-Fm-Black">
-                    64
-                  </span>{" "}
-                  left
-                </p>
-              </div>
-              <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-0 rounded-xl border-[1px] border-gray-300 px-7 py-8 opacity-60">
-                <div className="h-6 w-6 rounded-full border-[1px]"></div>
-                <div className="Fm:flex Fm:gap-3">
-                  <p className="text-sm font-bold">Mahogany Special Edition</p>
-                  <p className="text-sm text-Fm-Moderate-cyan">
-                    Pledge $200 or more
-                  </p>
-                </div>
-                <p className="mb-3 mt-7 text-sm leading-6 text-Fm-Dark-gray Fm:order-4 Fm:mt-3 Fm:pl-11">
-                  You get two Special Edition Mahogany stands, a Backer T-Shirt,
-                  and a personal thank you. You&apos;ll be added to our Backer
-                  member list. Shipping is included.
-                </p>
-                <p className="flex items-center text-Fm-Dark-gray Fm:order-3 Fm:my-0 Fm:ml-auto Fm:self-stretch">
-                  <span className="mr-2 text-lg font-bold text-Fm-Black">
-                    0
-                  </span>{" "}
-                  left
-                </p>
-              </div>
+                ))}
+              {/* rest of the rewards */}
+              {Object.entries(projectData!.pledges)
+                .slice(1)
+                .map(([key, value]) => (
+                  <div
+                    className={`mb-7 flex flex-wrap items-center gap-x-5 gap-y-0 rounded-xl border-[1px] border-gray-300 px-7 py-8  ${
+                      value.amountLeft === 0 && "opacity-40"
+                    } ${key === currentPledge && "border-Fm-Dark-cyan"}`}
+                    key={key}
+                  >
+                    <div
+                      className={`flex h-6 w-6 items-center justify-center rounded-full border-[1px]`}
+                    >
+                      {key === currentPledge && (
+                        <div className="h-3 w-3 rounded-full bg-Fm-Moderate-cyan"></div>
+                      )}
+                    </div>
+                    <div className="Fm:flex Fm:gap-3">
+                      <p
+                        className="text-sm font-bold hover:cursor-pointer hover:text-Fm-Moderate-cyan"
+                        onClick={() => {
+                          if (value.amountLeft !== 0) {
+                            setCurrentPledge(key);
+                          }
+                        }}
+                      >
+                        {value.title}
+                      </p>
+                      <p className="text-sm text-Fm-Moderate-cyan">
+                        Pledge ${value.minPledge} or more
+                      </p>
+                    </div>
+                    <p className="mb-3 mt-7 text-sm leading-6 text-Fm-Dark-gray Fm:order-4 Fm:mt-3 Fm:pl-11">
+                      {value.description}
+                    </p>
+                    <p className="flex items-center text-Fm-Dark-gray Fm:order-3 Fm:my-0 Fm:ml-auto Fm:self-stretch">
+                      <span className="mr-2 text-lg font-bold text-Fm-Black">
+                        {value.amountLeft}
+                      </span>{" "}
+                      left
+                    </p>
+                    {key === currentPledge && (
+                      <div className="order-last w-full pt-6 Fm:flex Fm:flex-wrap">
+                        <div className="w-full border-t-[1px] pb-6 Fm:grow"></div>
+                        <p className="w-full pb-4 text-center text-Fm-Dark-gray Fm:w-auto Fm:self-center Fm:pb-0">
+                          Enter your pledge
+                        </p>
+                        <div className="flex w-full justify-between gap-3 Fm:ml-auto Fm:w-auto Fm:max-w-[220px]">
+                          <input
+                            type="number"
+                            placeholder={value.minPledge.toString()}
+                            min={value.minPledge}
+                            value={amountPledged?.toString()}
+                            onChange={(e) => {
+                              setAmountPledged(Number(e.target.value));
+                            }}
+                            className="w-1/2 rounded-full border p-3 font-bold text-black"
+                            style={{
+                              backgroundImage: "url(images/icon-dollar.svg)",
+                              backgroundSize: "10px",
+                              backgroundPosition: "30% 53%",
+                              backgroundRepeat: "no-repeat",
+                              paddingLeft: "40px",
+                            }}
+                          />
+                          <button
+                            className="w-1/2 rounded-full border bg-Fm-Moderate-cyan p-3 px-7 text-sm font-bold text-white"
+                            onClick={() => {
+                              if (amountPledged! > value.minPledge) {
+                                setProjectData((projectData) => {
+                                  return {
+                                    ...projectData!,
+                                    backed:
+                                      projectData!.backed + amountPledged!,
+                                    totalBackers: projectData!.totalBackers + 1,
+                                    pledges: {
+                                      ...projectData!.pledges,
+                                      [key]: {
+                                        ...value,
+                                        amountLeft: value.amountLeft! - 1,
+                                      },
+                                    },
+                                  };
+                                });
+                                setIsSuccessful(true);
+                                setIsPledgeOpen(false);
+                                setAmountPledged(null);
+                              } else {
+                                alert(
+                                  `For the ${value.title} you need to pledge at least ${value.minPledge}`,
+                                );
+                              }
+                            }}
+                          >
+                            Continue
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
             </div>
+          </div>
+        </div>
+      )}
+      {isSuccessful && (
+        <div className="absolute left-0 top-0 z-20 flex h-screen w-screen items-center justify-center bg-[rgba(0,0,0,0.35)]">
+          <div className="mx-6 flex w-full flex-col items-center justify-center rounded-xl bg-white px-6 pt-8 Fm:max-w-xl">
+            <Image
+              src={"/images/icon-check.svg"}
+              alt="check"
+              width="64"
+              height="64"
+              className="mx-auto"
+            />
+            <h2 className="my-8 text-center text-xl font-bold">
+              Thanks for your support!
+            </h2>
+            <p className="text-center text-sm leading-6 text-Fm-Dark-gray">
+              Your pledge brings us one step closer to sharing Mastercraft
+              Bamboo Monitor Riser worldwide. You will get an email once our
+              campaign is completed.
+            </p>
+            <button
+              className="my-10 rounded-full bg-Fm-Moderate-cyan px-7  py-3 font-bold text-white"
+              onClick={() => setIsSuccessful(false)}
+            >
+              Got it!
+            </button>
           </div>
         </div>
       )}
