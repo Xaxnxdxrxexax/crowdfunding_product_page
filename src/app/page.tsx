@@ -6,7 +6,7 @@ export default function HomePage() {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const [isPledgeOpen, setIsPledgeOpen] = useState(false);
   return (
-    <main className="overflow-hidden bg-[#FAFAFA] pb-5">
+    <main className="relative overflow-hidden bg-[#FAFAFA] pb-5">
       <header className="relative flex items-center Fm:mx-auto Fm:max-w-[1440px]">
         <picture>
           <source
@@ -27,11 +27,10 @@ export default function HomePage() {
             isHamburgerOpen ? "block" : "hidden"
           } fixed left-0 top-0 z-10 h-screen w-screen bg-gradient-to-b from-[rgba(0,0,0,0.35)] to-[rgba(0,0,0,0.05)]`}
         ></div>
-
         <div
           className={`${
             isPledgeOpen ? "block" : "hidden"
-          } fixed left-0 top-0 z-20 h-screen w-screen bg-gradient-to-b from-[rgba(0,0,0,0.35)] to-[rgba(0,0,0,0.05)]`}
+          } fixed left-0 top-0 z-20 h-screen w-screen bg-[rgba(0,0,0,0.35)]`}
         ></div>
         <nav className="absolute left-0 top-0 mx-5 mt-8 flex w-[90%] items-center Fm:ml-40 Fm:mt-11 Fm:w-[78%]">
           <Image
@@ -69,6 +68,7 @@ export default function HomePage() {
               </ul>
             </div>
           )}
+
           <ul className="invisible absolute ml-auto flex items-center gap-8 font-medium text-white Fm:visible Fm:static">
             {["About", "Discover", "Get Started"].map((item) => (
               <li key={item} className="hover:cursor-pointer">
@@ -209,42 +209,115 @@ export default function HomePage() {
         </aside>
       </section>
       {isPledgeOpen && (
-        <div className="absolute top-32 z-20 mx-5 w-[90%] rounded-xl bg-white px-6 pb-8 pt-5 ">
-          <h2 className="text-xl font-bold">Back this project</h2>
-          <Image
-            src={"/images/icon-close-modal.svg"}
-            alt="close"
-            width="15"
-            height="15"
-            onClick={() => setIsPledgeOpen(false)}
-            className="absolute right-6 top-6 cursor-pointer Fm:w-max"
-          />
-          <p className="mb-7 mt-8 text-sm leading-6 text-Fm-Dark-gray">
-            Want to support us in bringing Mastercraft Bamboo Monitor Riser out
-            in the world?
-          </p>
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-0 rounded-xl border-[1px] border-gray-300 px-7 py-8">
-            <div className="h-6 w-6 rounded-full border-[1px]"></div>
-            <p className="text-sm font-bold">Pledge with no reward</p>
-            <p className="mt-7 text-sm leading-6 text-Fm-Dark-gray">
-              Choose to support us without a reward if you simply believe in our
-              project. As a backer, you will be signed up to receive product
-              updates via email.
-            </p>
-          </div>
-          <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-0 rounded-xl border-[1px] border-gray-300 px-7 py-8">
-            <div className="h-6 w-6 rounded-full border-[1px]"></div>
-            <div>
-              <p className="text-sm font-bold">Bamboo Stand</p>
-              <p className="text-sm text-Fm-Moderate-cyan">
-                Pledge $25 or more
+        <div className="absolute left-0 top-0 flex h-screen w-screen items-center justify-center">
+          <div className="absolute top-32 z-20 mx-auto w-[90%] rounded-xl bg-white px-6 pb-8 pt-5 Fm:max-w-[740px] Fm:p-12">
+            <div className="">
+              <h2 className="text-xl font-bold">Back this project</h2>
+              <Image
+                src={"/images/icon-close-modal.svg"}
+                alt="close"
+                width="15"
+                height="15"
+                onClick={() => setIsPledgeOpen(false)}
+                className="absolute right-6 top-6 cursor-pointer Fm:right-12 Fm:top-12 Fm:w-max"
+              />
+              <p className="mb-7 mt-8 text-sm leading-6 text-Fm-Dark-gray">
+                Want to support us in bringing Mastercraft Bamboo Monitor Riser
+                out in the world?
               </p>
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-0 rounded-xl border-[1px] border-gray-300 px-7 py-8">
+                <div className="h-6 w-6 rounded-full border-[1px]"></div>
+                <p className="text-sm font-bold">Pledge with no reward</p>
+                <p className="mt-7 text-sm leading-6 text-Fm-Dark-gray Fm:mt-3 Fm:pl-11">
+                  Choose to support us without a reward if you simply believe in
+                  our project. As a backer, you will be signed up to receive
+                  product updates via email.
+                </p>
+              </div>
+              <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-0 rounded-xl border-[1px] border-gray-300 px-7 py-8">
+                <div className="h-6 w-6 rounded-full border-[1px]"></div>
+                <div className="Fm:flex Fm:gap-3">
+                  <p className="text-sm font-bold">Bamboo Stand</p>
+                  <p className="text-sm text-Fm-Moderate-cyan">
+                    Pledge $25 or more
+                  </p>
+                </div>
+                <p className="mb-3 mt-7 text-sm leading-6 text-Fm-Dark-gray Fm:order-4 Fm:mt-3 Fm:pl-11">
+                  You get an ergonomic stand made of natural bamboo. You&apos;ve
+                  helped us launch our promotional campaign, and you’ll be added
+                  to a special Backer member list.
+                </p>
+                <p className="flex items-center text-Fm-Dark-gray Fm:order-3 Fm:my-0 Fm:ml-auto Fm:self-stretch">
+                  <span className="mr-2 text-lg font-bold text-Fm-Black">
+                    101
+                  </span>{" "}
+                  left
+                </p>
+                <div className="order-last w-full pt-6 Fm:flex Fm:flex-wrap">
+                  <div className="w-full border-t-[1px] pb-6 Fm:grow"></div>
+                  <p className="w-full pb-4 text-center text-Fm-Dark-gray Fm:w-auto Fm:self-center Fm:pb-0">
+                    Enter your pledge
+                  </p>
+                  <div className="flex w-full justify-between gap-3 Fm:ml-auto Fm:w-auto Fm:max-w-[220px]">
+                    <input
+                      type="number"
+                      placeholder="25"
+                      className="w-1/2 rounded-full border p-3 font-bold text-black"
+                      style={{
+                        backgroundImage: "url(images/icon-dollar.svg)",
+                        backgroundSize: "10px",
+                        backgroundPosition: "30% 53%",
+                        backgroundRepeat: "no-repeat",
+                        paddingLeft: "40px",
+                      }}
+                    />
+                    <button className="w-1/2 rounded-full border bg-Fm-Moderate-cyan p-3 px-7 text-sm font-bold text-white">
+                      Continue
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-0 rounded-xl border-[1px] border-gray-300 px-7 py-8">
+                <div className="h-6 w-6 rounded-full border-[1px]"></div>
+                <div className="Fm:flex Fm:gap-3">
+                  <p className="text-sm font-bold">Black Edition Stand</p>
+                  <p className="text-sm text-Fm-Moderate-cyan">
+                    Pledge $75 or more
+                  </p>
+                </div>
+                <p className="mb-3 mt-7 text-sm leading-6 text-Fm-Dark-gray Fm:order-4 Fm:mt-3 Fm:pl-11">
+                  You get a Black Special Edition computer stand and a personal
+                  thank you. You&apos;ll be added to our Backer member list.
+                  Shipping is included.
+                </p>
+                <p className="flex items-center text-Fm-Dark-gray Fm:order-3 Fm:my-0 Fm:ml-auto Fm:self-stretch">
+                  <span className="mr-2 text-lg font-bold text-Fm-Black">
+                    64
+                  </span>{" "}
+                  left
+                </p>
+              </div>
+              <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-0 rounded-xl border-[1px] border-gray-300 px-7 py-8 opacity-60">
+                <div className="h-6 w-6 rounded-full border-[1px]"></div>
+                <div className="Fm:flex Fm:gap-3">
+                  <p className="text-sm font-bold">Mahogany Special Edition</p>
+                  <p className="text-sm text-Fm-Moderate-cyan">
+                    Pledge $200 or more
+                  </p>
+                </div>
+                <p className="mb-3 mt-7 text-sm leading-6 text-Fm-Dark-gray Fm:order-4 Fm:mt-3 Fm:pl-11">
+                  You get two Special Edition Mahogany stands, a Backer T-Shirt,
+                  and a personal thank you. You&apos;ll be added to our Backer
+                  member list. Shipping is included.
+                </p>
+                <p className="flex items-center text-Fm-Dark-gray Fm:order-3 Fm:my-0 Fm:ml-auto Fm:self-stretch">
+                  <span className="mr-2 text-lg font-bold text-Fm-Black">
+                    0
+                  </span>{" "}
+                  left
+                </p>
+              </div>
             </div>
-            <p className="mt-7 text-sm leading-6 text-Fm-Dark-gray">
-              You get an ergonomic stand made of natural bamboo. You&apos;ve
-              helped us launch our promotional campaign, and you’ll be added to
-              a special Backer member list.
-            </p>
           </div>
         </div>
       )}
