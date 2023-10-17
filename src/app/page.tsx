@@ -10,6 +10,10 @@ export default function HomePage() {
   const [currentPledge, setCurrentPledge] = useState<null | string>(null);
   const [isSuccessful, setIsSuccessful] = useState(false);
   const [amountPledged, setAmountPledged] = useState<null | number>(null);
+
+  const { title, total, totalBackers, daysLeft, favorite, pledges, backed } =
+    projectData!;
+
   return (
     <main className="relative overflow-hidden bg-[#FAFAFA] pb-5">
       <header className="relative flex items-center Fm:mx-auto Fm:max-w-[1440px]">
@@ -91,7 +95,7 @@ export default function HomePage() {
           height="56"
           className="-translate-y-1/2 transform"
         />
-        <h1 className="text-center text-2xl font-bold">{projectData?.title}</h1>
+        <h1 className="text-center text-2xl font-bold">{title}</h1>
         <h2 className="mt-5 text-center text-sm tracking-tight text-Fm-Dark-gray">
           A beautiful & handcrafted monitor stand to reduce neck and eye strain.
         </h2>
@@ -113,7 +117,7 @@ export default function HomePage() {
           >
             <Image
               src={
-                projectData?.favorite
+                favorite
                   ? "/images/icon-bookmarked.svg"
                   : "/images/icon-bookmark.svg"
               }
@@ -124,10 +128,10 @@ export default function HomePage() {
             />
             <p
               className={`invisible absolute left-0 top-0 flex w-36 items-center rounded-r-full border bg-[#FAFAFA] pl-8 font-bold text-Fm-Dark-gray Fm:visible Fm:static ${
-                projectData?.favorite && "text-Fm-Moderate-cyan"
+                favorite && "text-Fm-Moderate-cyan"
               }`}
             >
-              {projectData?.favorite ? "Bookmarked" : "Bookmark"}
+              {favorite ? "Bookmarked" : "Bookmark"}
             </p>
           </div>
         </div>
@@ -135,31 +139,29 @@ export default function HomePage() {
       <section className="mx-auto my-8 flex w-[90%] -translate-y-12 transform flex-col items-center rounded-xl border bg-white px-8 py-10 Fm:max-w-[730px] Fm:-translate-y-24 Fm:flex-row Fm:flex-wrap ">
         <div className="text-center Fm:w-1/4 Fm:text-left">
           <p className="text-4xl font-bold text-Fm-Black">
-            ${projectData?.backed.toLocaleString()}
+            ${backed.toLocaleString()}
           </p>
           <p className="mt-2 text-Fm-Dark-gray">
-            of ${projectData?.total.toLocaleString()} backed
+            of ${total.toLocaleString()} backed
           </p>
         </div>
         <div className="my-7 w-20 border-t-[1px] Fm:rotate-90 Fm:transform"></div>
         <div className="text-center Fm:w-1/4 Fm:text-left">
           <p className="text-4xl font-bold text-Fm-Black">
-            {projectData?.totalBackers.toLocaleString()}
+            {totalBackers.toLocaleString()}
           </p>
           <p className="mt-2 text-Fm-Dark-gray">total backers</p>
         </div>
         <div className="my-7 w-20 border-t-[1px] Fm:rotate-90 Fm:transform"></div>
         <div className="text-center Fm:w-1/4 Fm:text-left">
-          <p className="text-4xl font-bold text-Fm-Black">
-            {projectData?.daysLeft}
-          </p>
+          <p className="text-4xl font-bold text-Fm-Black">{daysLeft}</p>
           <p className="mt-2 text-Fm-Dark-gray">days left</p>
         </div>
         <div className="mt-7 h-3 w-full overflow-hidden rounded-full bg-[#f4f4f4]">
           <div
             className="h-full rounded-full bg-Fm-Moderate-cyan"
             style={{
-              width: `${(projectData!.backed / projectData!.total) * 100}%`,
+              width: `${(backed / total) * 100}%`,
             }}
           ></div>
         </div>
@@ -181,42 +183,45 @@ export default function HomePage() {
           sticks to be stored under the stand.
         </p>
         {/* list pledges */}
-        {Object.entries(projectData!.pledges)
+        {Object.entries(pledges)
           .slice(1)
-          .map(([key, value]) => (
-            <aside
-              className={`mt-10 w-full rounded-xl border border-gray-300 pl-6 pt-6 Fm:flex Fm:flex-wrap Fm:items-center Fm:justify-around Fm:py-8 Fm:pr-10 ${
-                value.amountLeft === 0 && "opacity-40"
-              }`}
-              key={key}
-            >
-              <h4 className="text-sm font-bold Fm:text-xl">{value.title}</h4>
-              <p className="mb-6 mt-1 text-sm font-semibold text-Fm-Moderate-cyan Fm:mb-0 Fm:ml-auto Fm:text-base">
-                Pledge ${value.minPledge} or more
-              </p>
-              <p className="mr-3 text-sm leading-6 text-Fm-Dark-gray Fm:my-5 Fm:mr-0 Fm:text-base Fm:leading-7">
-                {value.description}
-              </p>
-              <p className="mb-7 mt-5 flex items-center text-Fm-Dark-gray Fm:my-0 Fm:self-stretch">
-                <span className="mr-2 text-3xl font-bold text-Fm-Black">
-                  {value.amountLeft}
-                </span>{" "}
-                left
-              </p>
-              <button
-                className={`mb-6 h-[50px] rounded-full bg-Fm-Moderate-cyan px-8 text-sm font-bold text-white hover:bg-Fm-Dark-cyan Fm:my-0 Fm:ml-auto ${
-                  value.amountLeft === 0 && "bg-Fm-Dark-gray"
+          .map(([key, value]) => {
+            const { title, description, minPledge, amountLeft } = value;
+            return (
+              <aside
+                className={`mt-10 w-full rounded-xl border border-gray-300 pl-6 pt-6 Fm:flex Fm:flex-wrap Fm:items-center Fm:justify-around Fm:py-8 Fm:pr-10 ${
+                  amountLeft === 0 && "opacity-40"
                 }`}
-                disabled={value.amountLeft === 0}
-                onClick={() => {
-                  setCurrentPledge(key);
-                  setIsPledgeOpen(true);
-                }}
+                key={key}
               >
-                {value.amountLeft === 0 ? "Out of Stock" : "Select Reward"}
-              </button>
-            </aside>
-          ))}
+                <h4 className="text-sm font-bold Fm:text-xl">{title}</h4>
+                <p className="mb-6 mt-1 text-sm font-semibold text-Fm-Moderate-cyan Fm:mb-0 Fm:ml-auto Fm:text-base">
+                  Pledge ${minPledge} or more
+                </p>
+                <p className="mr-3 text-sm leading-6 text-Fm-Dark-gray Fm:my-5 Fm:mr-0 Fm:text-base Fm:leading-7">
+                  {description}
+                </p>
+                <p className="mb-7 mt-5 flex items-center text-Fm-Dark-gray Fm:my-0 Fm:self-stretch">
+                  <span className="mr-2 text-3xl font-bold text-Fm-Black">
+                    {amountLeft}
+                  </span>{" "}
+                  left
+                </p>
+                <button
+                  className={`mb-6 h-[50px] rounded-full bg-Fm-Moderate-cyan px-8 text-sm font-bold text-white hover:bg-Fm-Dark-cyan Fm:my-0 Fm:ml-auto ${
+                    amountLeft === 0 && "bg-Fm-Dark-gray"
+                  }`}
+                  disabled={amountLeft === 0}
+                  onClick={() => {
+                    setCurrentPledge(key);
+                    setIsPledgeOpen(true);
+                  }}
+                >
+                  {amountLeft === 0 ? "Out of Stock" : "Select Reward"}
+                </button>
+              </aside>
+            );
+          })}
       </section>
       {/* pledge modal */}
       {isPledgeOpen && (
@@ -237,197 +242,205 @@ export default function HomePage() {
                 out in the world?
               </p>
               {/* no reward */}
-              {Object.entries(projectData!.pledges)
+              {Object.entries(pledges)
                 .slice(0, 1)
-                .map(([key, value]) => (
-                  <div
-                    className={`mb-7 flex flex-wrap items-center gap-x-5 gap-y-0 rounded-xl border-[1px] border-gray-300 px-7 py-8 ${
-                      key === currentPledge && "border-Fm-Dark-cyan"
-                    }`}
-                    key={key}
-                  >
+                .map(([key, value]) => {
+                  const { title, description, minPledge, amountLeft } = value;
+                  return (
                     <div
-                      className={`flex h-6 w-6 items-center justify-center rounded-full border-[1px]`}
+                      className={`mb-7 flex flex-wrap items-center gap-x-5 gap-y-0 rounded-xl border-[1px] border-gray-300 px-7 py-8 ${
+                        key === currentPledge && "border-Fm-Dark-cyan"
+                      }`}
+                      key={key}
                     >
-                      {key === currentPledge && (
-                        <div className="h-3 w-3 rounded-full bg-Fm-Moderate-cyan"></div>
-                      )}
-                    </div>
-                    <div className="Fm:flex Fm:gap-3">
-                      <p
-                        className="text-sm font-bold hover:cursor-pointer hover:text-Fm-Moderate-cyan"
-                        onClick={() => {
-                          setCurrentPledge(key);
-                        }}
+                      <div
+                        className={`flex h-6 w-6 items-center justify-center rounded-full border-[1px]`}
                       >
-                        {value.title}
-                      </p>
-                    </div>
-                    <p className="mb-3 mt-7 text-sm leading-6 text-Fm-Dark-gray Fm:order-4 Fm:mt-3 Fm:pl-11">
-                      {value.description}
-                    </p>
-
-                    {key === currentPledge && (
-                      <div className="order-last w-full pt-6 Fm:flex Fm:flex-wrap">
-                        <div className="w-full border-t-[1px] pb-6 Fm:grow"></div>
-                        <p className="w-full pb-4 text-center text-Fm-Dark-gray Fm:w-auto Fm:self-center Fm:pb-0">
-                          Enter your pledge
-                        </p>
-                        <div className="flex w-full justify-between gap-3 Fm:ml-auto Fm:w-auto Fm:max-w-[220px]">
-                          <input
-                            type="number"
-                            placeholder={value.minPledge.toString()}
-                            min={value.minPledge}
-                            value={amountPledged?.toString()}
-                            onChange={(e) => {
-                              setAmountPledged(Number(e.target.value));
-                            }}
-                            className="w-1/2 rounded-full border p-3 font-bold text-black"
-                            style={{
-                              backgroundImage: "url(images/icon-dollar.svg)",
-                              backgroundSize: "10px",
-                              backgroundPosition: "30% 53%",
-                              backgroundRepeat: "no-repeat",
-                              paddingLeft: "40px",
-                            }}
-                          />
-                          <button
-                            className="w-1/2 rounded-full border bg-Fm-Moderate-cyan p-3 px-7 text-sm font-bold text-white"
-                            onClick={() => {
-                              if (amountPledged! > value.minPledge) {
-                                setProjectData((projectData) => {
-                                  return {
-                                    ...projectData!,
-                                    backed:
-                                      projectData!.backed + amountPledged!,
-                                    totalBackers: projectData!.totalBackers + 1,
-                                    pledges: {
-                                      ...projectData!.pledges,
-                                      [key]: {
-                                        ...value,
-                                        amountLeft: value.amountLeft! - 1,
-                                      },
-                                    },
-                                  };
-                                });
-                                setIsSuccessful(true);
-                                setIsPledgeOpen(false);
-                                setAmountPledged(null);
-                              } else {
-                                alert(
-                                  `For the ${value.title} you need to pledge at least ${value.minPledge}`,
-                                );
-                              }
-                            }}
-                          >
-                            Continue
-                          </button>
-                        </div>
+                        {key === currentPledge && (
+                          <div className="h-3 w-3 rounded-full bg-Fm-Moderate-cyan"></div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                ))}
-              {/* rest of the rewards */}
-              {Object.entries(projectData!.pledges)
-                .slice(1)
-                .map(([key, value]) => (
-                  <div
-                    className={`mb-7 flex flex-wrap items-center gap-x-5 gap-y-0 rounded-xl border-[1px] border-gray-300 px-7 py-8  ${
-                      value.amountLeft === 0 && "opacity-40"
-                    } ${key === currentPledge && "border-Fm-Dark-cyan"}`}
-                    key={key}
-                  >
-                    <div
-                      className={`flex h-6 w-6 items-center justify-center rounded-full border-[1px]`}
-                    >
-                      {key === currentPledge && (
-                        <div className="h-3 w-3 rounded-full bg-Fm-Moderate-cyan"></div>
-                      )}
-                    </div>
-                    <div className="Fm:flex Fm:gap-3">
-                      <p
-                        className="text-sm font-bold hover:cursor-pointer hover:text-Fm-Moderate-cyan"
-                        onClick={() => {
-                          if (value.amountLeft !== 0) {
+                      <div className="Fm:flex Fm:gap-3">
+                        <p
+                          className="text-sm font-bold hover:cursor-pointer hover:text-Fm-Moderate-cyan"
+                          onClick={() => {
                             setCurrentPledge(key);
-                          }
-                        }}
-                      >
-                        {value.title}
-                      </p>
-                      <p className="text-sm text-Fm-Moderate-cyan">
-                        Pledge ${value.minPledge} or more
-                      </p>
-                    </div>
-                    <p className="mb-3 mt-7 text-sm leading-6 text-Fm-Dark-gray Fm:order-4 Fm:mt-3 Fm:pl-11">
-                      {value.description}
-                    </p>
-                    <p className="flex items-center text-Fm-Dark-gray Fm:order-3 Fm:my-0 Fm:ml-auto Fm:self-stretch">
-                      <span className="mr-2 text-lg font-bold text-Fm-Black">
-                        {value.amountLeft}
-                      </span>{" "}
-                      left
-                    </p>
-                    {key === currentPledge && (
-                      <div className="order-last w-full pt-6 Fm:flex Fm:flex-wrap">
-                        <div className="w-full border-t-[1px] pb-6 Fm:grow"></div>
-                        <p className="w-full pb-4 text-center text-Fm-Dark-gray Fm:w-auto Fm:self-center Fm:pb-0">
-                          Enter your pledge
+                          }}
+                        >
+                          {title}
                         </p>
-                        <div className="flex w-full justify-between gap-3 Fm:ml-auto Fm:w-auto Fm:max-w-[220px]">
-                          <input
-                            type="number"
-                            placeholder={value.minPledge.toString()}
-                            min={value.minPledge}
-                            value={amountPledged?.toString()}
-                            onChange={(e) => {
-                              setAmountPledged(Number(e.target.value));
-                            }}
-                            className="w-1/2 rounded-full border p-3 font-bold text-black"
-                            style={{
-                              backgroundImage: "url(images/icon-dollar.svg)",
-                              backgroundSize: "10px",
-                              backgroundPosition: "30% 53%",
-                              backgroundRepeat: "no-repeat",
-                              paddingLeft: "40px",
-                            }}
-                          />
-                          <button
-                            className="w-1/2 rounded-full border bg-Fm-Moderate-cyan p-3 px-7 text-sm font-bold text-white"
-                            onClick={() => {
-                              if (amountPledged! > value.minPledge) {
-                                setProjectData((projectData) => {
-                                  return {
-                                    ...projectData!,
-                                    backed:
-                                      projectData!.backed + amountPledged!,
-                                    totalBackers: projectData!.totalBackers + 1,
-                                    pledges: {
-                                      ...projectData!.pledges,
-                                      [key]: {
-                                        ...value,
-                                        amountLeft: value.amountLeft! - 1,
-                                      },
-                                    },
-                                  };
-                                });
-                                setIsSuccessful(true);
-                                setIsPledgeOpen(false);
-                                setAmountPledged(null);
-                              } else {
-                                alert(
-                                  `For the ${value.title} you need to pledge at least ${value.minPledge}`,
-                                );
-                              }
-                            }}
-                          >
-                            Continue
-                          </button>
-                        </div>
                       </div>
-                    )}
-                  </div>
-                ))}
+                      <p className="mb-3 mt-7 text-sm leading-6 text-Fm-Dark-gray Fm:order-4 Fm:mt-3 Fm:pl-11">
+                        {description}
+                      </p>
+
+                      {key === currentPledge && (
+                        <div className="order-last w-full pt-6 Fm:flex Fm:flex-wrap">
+                          <div className="w-full border-t-[1px] pb-6 Fm:grow"></div>
+                          <p className="w-full pb-4 text-center text-Fm-Dark-gray Fm:w-auto Fm:self-center Fm:pb-0">
+                            Enter your pledge
+                          </p>
+                          <div className="flex w-full justify-between gap-3 Fm:ml-auto Fm:w-auto Fm:max-w-[220px]">
+                            <input
+                              type="number"
+                              placeholder={minPledge.toString()}
+                              min={minPledge}
+                              value={amountPledged?.toString()}
+                              onChange={(e) => {
+                                setAmountPledged(Number(e.target.value));
+                              }}
+                              className="w-1/2 rounded-full border p-3 font-bold text-black"
+                              style={{
+                                backgroundImage: "url(images/icon-dollar.svg)",
+                                backgroundSize: "10px",
+                                backgroundPosition: "30% 53%",
+                                backgroundRepeat: "no-repeat",
+                                paddingLeft: "40px",
+                              }}
+                            />
+                            <button
+                              className="w-1/2 rounded-full border bg-Fm-Moderate-cyan p-3 px-7 text-sm font-bold text-white hover:cursor-pointer"
+                              onClick={() => {
+                                if (amountPledged! > minPledge) {
+                                  setProjectData((projectData) => {
+                                    return {
+                                      ...projectData!,
+                                      backed:
+                                        projectData!.backed + amountPledged!,
+                                      totalBackers:
+                                        projectData!.totalBackers + 1,
+                                      pledges: {
+                                        ...projectData!.pledges,
+                                        [key]: {
+                                          ...value,
+                                          amountLeft: amountLeft! - 1,
+                                        },
+                                      },
+                                    };
+                                  });
+                                  setIsSuccessful(true);
+                                  setIsPledgeOpen(false);
+                                  setAmountPledged(null);
+                                } else {
+                                  alert(
+                                    `For the ${title} you need to pledge at least ${minPledge}`,
+                                  );
+                                }
+                              }}
+                            >
+                              Continue
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              {/* rest of the rewards */}
+              {Object.entries(pledges)
+                .slice(1)
+                .map(([key, value]) => {
+                  const { title, description, minPledge, amountLeft } = value;
+                  return (
+                    <div
+                      className={`mb-7 flex flex-wrap items-center gap-x-5 gap-y-0 rounded-xl border-[1px] border-gray-300 px-7 py-8  ${
+                        amountLeft === 0 && "opacity-40"
+                      } ${key === currentPledge && "border-Fm-Dark-cyan"}`}
+                      key={key}
+                    >
+                      <div
+                        className={`flex h-6 w-6 items-center justify-center rounded-full border-[1px]`}
+                      >
+                        {key === currentPledge && (
+                          <div className="h-3 w-3 rounded-full bg-Fm-Moderate-cyan"></div>
+                        )}
+                      </div>
+                      <div className="Fm:flex Fm:gap-3">
+                        <p
+                          className="text-sm font-bold hover:cursor-pointer hover:text-Fm-Moderate-cyan"
+                          onClick={() => {
+                            if (amountLeft !== 0) {
+                              setCurrentPledge(key);
+                            }
+                          }}
+                        >
+                          {title}
+                        </p>
+                        <p className="text-sm text-Fm-Moderate-cyan">
+                          Pledge ${minPledge} or more
+                        </p>
+                      </div>
+                      <p className="mb-3 mt-7 text-sm leading-6 text-Fm-Dark-gray Fm:order-4 Fm:mt-3 Fm:pl-11">
+                        {description}
+                      </p>
+                      <p className="flex items-center text-Fm-Dark-gray Fm:order-3 Fm:my-0 Fm:ml-auto Fm:self-stretch">
+                        <span className="mr-2 text-lg font-bold text-Fm-Black">
+                          {amountLeft}
+                        </span>{" "}
+                        left
+                      </p>
+                      {key === currentPledge && (
+                        <div className="order-last w-full pt-6 Fm:flex Fm:flex-wrap">
+                          <div className="w-full border-t-[1px] pb-6 Fm:grow"></div>
+                          <p className="w-full pb-4 text-center text-Fm-Dark-gray Fm:w-auto Fm:self-center Fm:pb-0">
+                            Enter your pledge
+                          </p>
+                          <div className="flex w-full justify-between gap-3 Fm:ml-auto Fm:w-auto Fm:max-w-[220px]">
+                            <input
+                              type="number"
+                              placeholder={minPledge.toString()}
+                              min={minPledge}
+                              value={amountPledged?.toString()}
+                              onChange={(e) => {
+                                setAmountPledged(Number(e.target.value));
+                              }}
+                              className="w-1/2 rounded-full border p-3 font-bold text-black"
+                              style={{
+                                backgroundImage: "url(images/icon-dollar.svg)",
+                                backgroundSize: "10px",
+                                backgroundPosition: "30% 53%",
+                                backgroundRepeat: "no-repeat",
+                                paddingLeft: "40px",
+                              }}
+                            />
+                            <button
+                              className="w-1/2 rounded-full border bg-Fm-Moderate-cyan p-3 px-7 text-sm font-bold text-white"
+                              onClick={() => {
+                                if (amountPledged! > minPledge) {
+                                  setProjectData((projectData) => {
+                                    return {
+                                      ...projectData!,
+                                      backed:
+                                        projectData!.backed + amountPledged!,
+                                      totalBackers:
+                                        projectData!.totalBackers + 1,
+                                      pledges: {
+                                        ...projectData!.pledges,
+                                        [key]: {
+                                          ...value,
+                                          amountLeft: amountLeft! - 1,
+                                        },
+                                      },
+                                    };
+                                  });
+                                  setIsSuccessful(true);
+                                  setIsPledgeOpen(false);
+                                  setAmountPledged(null);
+                                } else {
+                                  alert(
+                                    `For the ${title} you need to pledge at least $${minPledge}`,
+                                  );
+                                }
+                              }}
+                            >
+                              Continue
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
             </div>
           </div>
         </div>
