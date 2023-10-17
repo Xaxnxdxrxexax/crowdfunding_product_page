@@ -1,10 +1,12 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
+import fmData from "data.json";
 
 export default function HomePage() {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const [isPledgeOpen, setIsPledgeOpen] = useState(false);
+  const [projectData, setProjectData] = useState(fmData[0]);
   return (
     <main className="relative overflow-hidden bg-[#FAFAFA] pb-5">
       <header className="relative flex items-center Fm:mx-auto Fm:max-w-[1440px]">
@@ -86,9 +88,7 @@ export default function HomePage() {
           height="56"
           className="-translate-y-1/2 transform"
         />
-        <h1 className="text-center text-2xl font-bold">
-          Mastercraft Bamboo Monitor Riser
-        </h1>
+        <h1 className="text-center text-2xl font-bold">{projectData?.title}</h1>
         <h2 className="mt-5 text-center text-sm tracking-tight text-Fm-Dark-gray">
           A beautiful & handcrafted monitor stand to reduce neck and eye strain.
         </h2>
@@ -99,39 +99,65 @@ export default function HomePage() {
           >
             Back this project
           </button>
-          <div className="flex hover:cursor-pointer hover:opacity-60 Fm:ml-auto">
+          <div
+            className="flex hover:cursor-pointer hover:opacity-60 Fm:ml-auto"
+            onClick={() => {
+              setProjectData((projectData) => ({
+                ...projectData!,
+                favorite: !projectData!.favorite,
+              }));
+            }}
+          >
             <Image
-              src={"/images/icon-bookmark.svg"}
+              src={
+                projectData?.favorite
+                  ? "/images/icon-bookmarked.svg"
+                  : "/images/icon-bookmark.svg"
+              }
               alt="bookmark"
               width="56"
               height="56"
               className="Fm:translate-x-1/2 Fm:transform"
             />
-            <p className="invisible absolute left-0 top-0 flex w-36 items-center rounded-r-full border bg-[#FAFAFA] pl-10 font-bold text-Fm-Dark-gray Fm:visible Fm:static">
-              Bookmark
+            <p
+              className={`invisible absolute left-0 top-0 flex w-36 items-center rounded-r-full border bg-[#FAFAFA] pl-8 font-bold text-Fm-Dark-gray Fm:visible Fm:static ${
+                projectData?.favorite && "text-Fm-Dark-cyan"
+              }`}
+            >
+              {projectData?.favorite ? "Bookmarked" : "Bookmark"}
             </p>
           </div>
         </div>
       </section>
       <section className="mx-auto my-8 flex w-[90%] -translate-y-12 transform flex-col items-center rounded-xl border bg-white px-8 py-10 Fm:max-w-[730px] Fm:-translate-y-24 Fm:flex-row Fm:flex-wrap ">
         <div className="text-center Fm:w-1/4 Fm:text-left">
-          <p className="text-4xl font-bold text-Fm-Black">$89,914</p>
-          <p className="mt-2 text-Fm-Dark-gray">of $100,000 backed</p>
+          <p className="text-4xl font-bold text-Fm-Black">
+            ${projectData?.backed.toLocaleString()}
+          </p>
+          <p className="mt-2 text-Fm-Dark-gray">
+            of ${projectData?.total.toLocaleString()} backed
+          </p>
         </div>
         <div className="my-7 w-20 border-t-[1px] Fm:rotate-90 Fm:transform"></div>
         <div className="text-center Fm:w-1/4 Fm:text-left">
-          <p className="text-4xl font-bold text-Fm-Black">5,007</p>
+          <p className="text-4xl font-bold text-Fm-Black">
+            {projectData?.totalBackers.toLocaleString()}
+          </p>
           <p className="mt-2 text-Fm-Dark-gray">total backers</p>
         </div>
         <div className="my-7 w-20 border-t-[1px] Fm:rotate-90 Fm:transform"></div>
         <div className="text-center Fm:w-1/4 Fm:text-left">
-          <p className="text-4xl font-bold text-Fm-Black">56</p>
+          <p className="text-4xl font-bold text-Fm-Black">
+            {projectData?.daysLeft}
+          </p>
           <p className="mt-2 text-Fm-Dark-gray">days left</p>
         </div>
         <div className="mt-7 h-3 w-full rounded-full bg-[#f4f4f4]">
           <div
             className="h-full rounded-full bg-Fm-Moderate-cyan"
-            style={{ width: "80%" }}
+            style={{
+              width: `${(projectData!.backed / projectData!.total) * 100}%`,
+            }}
           ></div>
         </div>
       </section>
