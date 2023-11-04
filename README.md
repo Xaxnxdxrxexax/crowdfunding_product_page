@@ -15,12 +15,12 @@ Mock landing page with complex responsive grid and flex layout, the info is take
 
 ![mobile](./public/screenshots/crowdfunding-product-page-smoky.vercel.app_.png)
 
-![mobile menu](<./public/screenshots/crowdfunding-product-page-smoky.vercel.app_ (1).png>)
+![mobile menu](<./public/screenshots/crowdfunding-product-page-smoky.vercel.app_(1).png>)
 
-![mobile active](<./public/screenshots/crowdfunding-product-page-smoky.vercel.app_ (2).png>)
+![mobile active](<./public/screenshots/crowdfunding-product-page-smoky.vercel.app_(2).png>)
 
 ## 1440px
 
-![desktop](<./public/screenshots/crowdfunding-product-page-smoky.vercel.app_ (3).png>)
+![desktop](<./public/screenshots/crowdfunding-product-page-smoky.vercel.app_(3).png>)
 
 ![desktop active](./public/screenshots/crowdfunding-product-page-8mxi8ye3k-xaxnxdxrxexax.vercel.app_.png)
