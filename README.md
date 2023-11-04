@@ -1,4 +1,4 @@
-# Multipage space tourism website
+# Crowdfunding product page
 
 Mock landing page with complex responsive grid and flex layout, the info is taken from a JSON file,
 
